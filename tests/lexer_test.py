@@ -1,4 +1,3 @@
-import logging
 from re import T
 from unittest import TestCase
 from typing import List
