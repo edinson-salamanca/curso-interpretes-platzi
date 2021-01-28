@@ -20,7 +20,10 @@ class Lexer:
         self._skip_whitespace()
 
         if match(r'^=$', self._character):
-            token = Token(TokenType.ASSIGN, self._character)
+            if self._peek_character() == '=':
+                token = self._make_two_character_token(TokenType.EQ)
+            else:
+                token = Token(TokenType.ASSIGN, self._character)
 
         elif match(r'^\+$', self._character):
             token = Token(TokenType.PLUS, self._character)
@@ -59,7 +62,10 @@ class Lexer:
             token = Token(TokenType.MULTIPLICATION, self._character)
 
         elif match(r'^!$', self._character):
-            token = Token(TokenType.NEGATION, self._character)
+            if self._peek_character() == '=':
+                token = self._make_two_character_token(TokenType.NOT_EQ)
+            else:
+                token = Token(TokenType.NEGATION, self._character)
 
         elif self._is_letter(self._character):
             literal = self._read_identifier()
@@ -88,6 +94,19 @@ class Lexer:
 
     def _is_number(self, character: str) -> bool:
         return bool(match(r'^\d$', character))
+
+    def _make_two_character_token(self, token_type: TokenType) -> Token:
+        prefix = self._character
+        self._read_character()
+        sufix = self._character
+
+        return Token(token_type, f'{prefix}{sufix}')
+
+    def _peek_character(self) -> str:
+        if self._read_position >= len(self._source):
+            return ''
+        else:
+            return self._source[self._read_position]
 
     def _read_character(self) -> None:
         if(self._read_position >= len(self._source)):
