@@ -1,10 +1,13 @@
-from typing import List, cast
+from typing import (
+    List,
+    cast
+)
 from unittest import TestCase
 
 from lpp.lexer import Lexer
 from lpp.ast import (
     LetStatement,
-    Program, Statement,
+    Program,
 
 )
 from lpp.parser import Parser
